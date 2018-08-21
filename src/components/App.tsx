@@ -1,12 +1,15 @@
 import * as React from 'react'
-/*
-export default function App() {
-  return (<h1>Hello World!</h1>)
-} */
-
+import LinkList from './LinkList';
+import CreateLink from './CreateLink';
 
 export default class App extends React.Component {
   render() {
-    return (<h1>Hi World!</h1>)
+    return (
+      <main>
+        <h1>Hackernews Clone</h1>
+        <LinkList />
+        <CreateLink />
+      </main>
+    )
   }
 }
