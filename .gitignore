@@ -63,3 +63,6 @@ typings/
 # parcel build output
 .cache
 dist
+
+# hide the server
+server/
