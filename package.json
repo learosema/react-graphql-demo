@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "parcel src/index.html"
+    "start": "parcel src/index.html",
+    "server": "cd server && npm start",
+    "server-dev": "cd server && npm run dev"
   },
   "repository": {
     "type": "git",
