@@ -43,15 +43,25 @@ header a:hover {
   text-decoration: underline;
 }
 
-.header__form {
-  
+main {
+  margin: .5em;
 }
 
-.header__form label {
+.login-form label {
   display: block;
   font-family: sans-serif;
   color: #000;
-  font-size: .75em;
-  line-height: 50%;
-  padding-top: .5em;
+}
+
+.login-form button {
+  background: orange;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: .5em 1em; 
+  margin: .25em .25em .25em 0;
+}
+
+.login-form button:active {
+  background: orangered;
 }
