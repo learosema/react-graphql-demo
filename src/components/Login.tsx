@@ -1,5 +1,23 @@
 import * as React from 'react'
 import { AUTH_TOKEN } from '../constants'
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
+
+const SIGNUP_MUTATION = gql`
+  mutation SignupMutation($email: String!, $password: String!, $name: String!) {
+    signup(email: $email, password: $password, name: $name) {
+      token
+    }
+  }
+`
+
+const LOGIN_MUTATION = gql`
+  mutation LoginMutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+    }
+  }
+`
 
 
 export default class Login extends React.Component<any, any> {
@@ -14,7 +32,7 @@ export default class Login extends React.Component<any, any> {
     const { login, email, password, name } = this.state
     return (
       
-      <div className="header__form">
+      <div className="login-form">
         <h4>
           { login ? 'Login' : 'Sign Up'}
         </h4>
@@ -25,28 +43,41 @@ export default class Login extends React.Component<any, any> {
           </div>)}
           <div>
             <label>email</label>
-            <input value={name} onChange={e => this.setState({name: e.target.value })} type="text" placeholder="Your email" />
+            <input value={email} onChange={e => this.setState({email: e.target.value })} type="text" placeholder="Your email" />
           </div>
           <div>
             <label>password</label>
-            <input value={password} onChange={e => this.setState({name: e.target.value })} type="password" placeholder="Choose a safe password" />
+            <input value={password} onChange={e => this.setState({password: e.target.value })} type="password" placeholder="Choose a safe password" />
           </div>
           <div>
-            <button onClick={() => this._confirm()}>
-            {login ? 'login' : 'create account'}
+            <Mutation 
+              mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION}
+              variables={{email, password, name}} onCompleted={data => this._confirm(data)}>
+              {mutation => (
+                <button onClick={() => mutation()}>
+                  {login ? 'login' : 'create account'}
+                </button>
+              )}
+            </Mutation>
+            <button onClick={() => this.setState({ login: !login })}>
+              {login ? 'need to create an account?' : 'already have an account?'}
             </button>
           </div>
         </div>
-        <a href="#" onClick={() => this.setState({ login: !login })}>
-          {login ? 'need to create an account?' : 'already have an account?'}
-        </a>
+        
       </div>
       
     )
   }
 
-  _confirm() {
+  _confirm = async (data: any) => {
+    const { token } = this.state.login ? data.login : data.signup
+    this._saveUserData(token)
+    this.props.history.push(`/`)
+  }
 
+  _saveUserData = (token: string) => {
+    localStorage.setItem(AUTH_TOKEN, token)
   }
 
 }
