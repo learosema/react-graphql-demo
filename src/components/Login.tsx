@@ -36,10 +36,7 @@ export default class Login extends React.Component<any, any> {
         </h4>
         <Mutation mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION} variables={{email, password, name}} onCompleted={data => this._confirm(data)}>
           {mutation => (
-          <form onSubmit={(e) => {
-              mutation()
-              e.preventDefault()
-            }}>
+          <form onSubmit={(e) => this._submitForm(e, mutation)}>
             {!login && (<div>
               <label>name</label>
               <input value={name} onChange={e => this.setState({name: e.target.value })} type="text" placeholder="Your name" />
@@ -56,7 +53,7 @@ export default class Login extends React.Component<any, any> {
               <button type="submit">
                 {login ? 'login' : 'create account'}
               </button>
-              <button onClick={this._changeForm}>
+              <button type="button" onClick={this._changeForm} aria-pressed={!login}>
                 {login ? 'need to create an account?' : 'already have an account?'}
               </button>
             </div>
@@ -70,6 +67,10 @@ export default class Login extends React.Component<any, any> {
   _changeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { login } = this.state
     this.setState({ login: !login })
+  }
+
+  _submitForm = (e: React.FormEvent<HTMLFormElement>, mutationFunc: Function) => {
+    mutationFunc()
     e.preventDefault()
   }
 
