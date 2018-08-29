@@ -39,15 +39,15 @@ export default class Login extends React.Component<any, any> {
           <form onSubmit={(e) => this._submitForm(e, mutation)}>
             {!login && (<div>
               <label>name</label>
-              <input value={name} onChange={e => this.setState({name: e.target.value })} type="text" placeholder="Your name" />
+              <input value={name} onChange={e => this.setState({name: e.target.value })} type="text" placeholder="Your name" required />
             </div>)}
             <div>
               <label>email</label>
-              <input value={email} onChange={e => this.setState({email: e.target.value })} type="text" placeholder="Your email" />
+              <input value={email} onChange={e => this.setState({email: e.target.value })} type="text" placeholder="Your email" required />
             </div>
             <div>
               <label>password</label>
-              <input value={password} onChange={e => this.setState({password: e.target.value })} type="password" placeholder="Choose a safe password" />
+              <input value={password} onChange={e => this.setState({password: e.target.value })} type="password" placeholder="Choose a safe password" required />
             </div>
             <div>            
               <button type="submit">
