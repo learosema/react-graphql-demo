@@ -26,7 +26,7 @@ export default class CreateLink extends React.Component<any, any> {
   render() {
     const { description, url } = this.state
     return (
-      <div>
+      <div className="form">
         <input value={description} onChange={e => this.setState({ description: e.target.value })} type="text" placeholder="A description for the link" />
         <input value={url} onChange={e => this.setState({ url: e.target.value })} type="text" placeholder="The URL for the link" />
         <Mutation 

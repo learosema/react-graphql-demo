@@ -47,13 +47,13 @@ main {
   margin: .5em;
 }
 
-.login-form label {
+.form label {
   display: block;
   font-family: sans-serif;
   color: #000;
 }
 
-.login-form button {
+.form button {
   background: orange;
   color: black;
   border: none;
@@ -62,13 +62,24 @@ main {
   margin: .25em .25em .25em 0;
 }
 
-.login-form button:active {
+.form button:active {
   background: orangered;
 }
 
-.login-form button[aria-pressed="true"] {
+.form button[aria-pressed="true"] {
   background: orangered;
 }
+
+.form input[type="text"], 
+.form input[type="password"] {
+  background: white;
+  color: black;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: .5em 1em; 
+  margin: .25em .25em .25em 0;
+}
+
 
 ol {
   color: gray;

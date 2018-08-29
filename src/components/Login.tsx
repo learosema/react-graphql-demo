@@ -30,7 +30,7 @@ export default class Login extends React.Component<any, any> {
   render() {
     const { login, email, password, name } = this.state
     return (
-      <div className="login-form">
+      <div className="form">
         <h2>
           { login ? 'Login' : 'Sign Up'}
         </h2>
