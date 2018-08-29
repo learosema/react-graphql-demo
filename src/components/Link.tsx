@@ -46,12 +46,12 @@ export default class Link extends React.Component<any, any> {
           {this.props.link.description} ({this.props.link.url})
         </div>
         <div className="link__info">
-          {this.props.link.votes.length} votes | by{' '}
-          {this.props.link.postedBy
-            ? this.props.link.postedBy.name
-            : 'Unknown'}{' '}
-          {timeDifferenceForDate(this.props.link.createdAt)}
-        </div>
+            {this.props.link.votes.length} votes | by{' '}
+            {this.props.link.postedBy
+              ? this.props.link.postedBy.name
+              : 'Unknown'}{' '}
+            {timeDifferenceForDate(this.props.link.createdAt)}
+          </div>
       </li>
       
     )
