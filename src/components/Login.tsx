@@ -31,9 +31,9 @@ export default class Login extends React.Component<any, any> {
     const { login, email, password, name } = this.state
     return (
       <div className="login-form">
-        <h4>
+        <h2>
           { login ? 'Login' : 'Sign Up'}
-        </h4>
+        </h2>
         <Mutation mutation={login ? LOGIN_MUTATION : SIGNUP_MUTATION} variables={{email, password, name}} onCompleted={data => this._confirm(data)}>
           {mutation => (
           <form onSubmit={(e) => this._submitForm(e, mutation)}>
