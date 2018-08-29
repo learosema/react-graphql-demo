@@ -87,13 +87,13 @@ export default class LinkList extends React.Component<any, any> {
     store.writeQuery({ query: FEED_QUERY, data })
   }
 
-  _subscribeToNewVotes = async (subscribeToMore: Function) => {
+  _subscribeToNewVotes = (subscribeToMore: Function) => {
     subscribeToMore({
       document: NEW_VOTES_SUBSCRIPTION
     })
   }
 
-  _subscribeToNewLinks = async (subscribeToMore : Function) => {
+  _subscribeToNewLinks = (subscribeToMore : Function) => {
     subscribeToMore({
       document: NEW_LINKS_SUBSCRIPTION,
       updateQuery: (prev: any, { subscriptionData }: any) => {
