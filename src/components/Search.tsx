@@ -45,8 +45,8 @@ class Search extends React.Component<any, any> {
   }
 
   render() {
-    return (<div className="form">
-      <form onSubmit={(e) => {
+    return (<div>
+      <form className="form" onSubmit={(e) => {
           e.preventDefault()
           this._executeSearch()
         }}>
