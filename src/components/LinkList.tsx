@@ -2,10 +2,13 @@ import * as React from 'react'
 import Link from './Link'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import { AUTH_TOKEN, LINKS_PER_PAGE } from '../constants'
+import { Fragment } from 'react';
+
 
 export const FEED_QUERY = gql`
-  {
-    feed {
+  query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
+    feed(first: $first, skip: $skip, orderBy: $orderBy) {
       links {
         id
         createdAt
@@ -22,6 +25,7 @@ export const FEED_QUERY = gql`
           }
         }
       }
+      count
     }
   }
 `
@@ -80,8 +84,54 @@ const NEW_VOTES_SUBSCRIPTION = gql`
 
 export default class LinkList extends React.Component<any, any> {
 
+  _getLinksToRender = (data: any) => {
+    const isNewPage = this.props.location.pathname.includes('new')
+    if (isNewPage) {
+      return data.feed.links
+    }
+    const rankedLinks = data.feed.links.slice()
+    rankedLinks.sort((l1: any, l2: any) => l2.votes.length - l1.votes.length)
+    return rankedLinks
+  }
+
+  _nextPage = (data: any) => {
+    const page = parseInt(this.props.match.params.page, 10)
+    if (page <= data.feed.count / LINKS_PER_PAGE) {
+      const nextPage = page + 1
+      this.props.history.push(`/new/${nextPage}`)
+    }
+  }
+  
+  _previousPage = () => {
+    const page = parseInt(this.props.match.params.page, 10)
+    if (page > 1) {
+      const previousPage = page - 1
+      this.props.history.push(`/new/${previousPage}`)
+    }
+  }
+
+  _getQueryVariables = () => {
+    const isNewPage = this.props.location.pathname.includes('new')
+    const page = parseInt(this.props.match.params.page, 10)
+  
+    const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0
+    const first = isNewPage ? LINKS_PER_PAGE : 100
+    const orderBy = isNewPage ? 'createdAt_DESC' : null
+    return { first, skip, orderBy }
+  }
+
   _updateCacheAfterVote = (store: any, createVote: any, linkId: string) => {
-    const data = store.readQuery({ query: FEED_QUERY })
+    const isNewPage = this.props.location.pathname.includes('new')
+    const page = parseInt(this.props.match.params.page, 10)
+  
+    const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0
+    const first = isNewPage ? LINKS_PER_PAGE : 100
+    const orderBy = isNewPage ? 'createdAt_DESC' : null
+    const data = store.readQuery({
+      query: FEED_QUERY,
+      variables: { first, skip, orderBy }
+    })
+
     const votedLink = data.feed.links.find((link : any) => link.id === linkId)
     votedLink.votes = createVote.link.votes
     store.writeQuery({ query: FEED_QUERY, data })
@@ -119,7 +169,7 @@ export default class LinkList extends React.Component<any, any> {
 
   render() {
     return (
-      <Query query={FEED_QUERY}>
+      <Query query={FEED_QUERY} variables={this._getQueryVariables()}>
         {
           ({loading, error, data, subscribeToMore}) => {
             if (loading) {
@@ -131,14 +181,24 @@ export default class LinkList extends React.Component<any, any> {
             this._subscribeToNewLinks(subscribeToMore)
             this._subscribeToNewVotes(subscribeToMore)
 
-            const linksToRender : Array<any> = data.feed.links
-            return (<ol>
-              {linksToRender.map((link, index) => 
-                <Link key={link.id} 
-                      link={link}
-                      index={index} 
-                      updateStoreAfterVote={this._updateCacheAfterVote} />)}
-            </ol>);
+            const linksToRender : Array<any> = this._getLinksToRender(data)
+            const isNewPage = this.props.location.pathname.includes('new')
+            const pageNum = this.props.match.params.page || 1
+            const pageIndex = (pageNum - 1) * LINKS_PER_PAGE
+            return (<Fragment>
+              <ol>
+                {linksToRender.map((link, index) => 
+                  <Link key={link.id} 
+                        link={link}
+                        index={index} 
+                        updateStoreAfterVote={this._updateCacheAfterVote} />
+                )}
+             </ol>
+            {isNewPage && (<nav className="pages">
+                <button type="button" onClick={() => this._previousPage()}> previous Page </button>
+                <button type="button" onClick={() => this._nextPage(data)}> next Page </button>
+            </nav>)}
+            </Fragment>);
           }
         }
       </Query>

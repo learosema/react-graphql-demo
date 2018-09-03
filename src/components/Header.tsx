@@ -16,6 +16,7 @@ class Header extends React.Component<any, any> {
       <h1><Link to="/">Hacker News</Link></h1>
       <nav>
       <Link to="/">new</Link>
+      <Link to="/top">top</Link>
       <Link to="/search">search</Link>
       {authToken && (<Link to="/create">submit</Link>)}
       {authToken ? (<a href="#" onClick={logout}>logout</a>) : (<Link to="/login">login</Link>)}
