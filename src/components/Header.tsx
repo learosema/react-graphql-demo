@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
-import Login from './Login'
 import { AUTH_TOKEN } from '../constants'
 
 class Header extends React.Component<any, any> {
