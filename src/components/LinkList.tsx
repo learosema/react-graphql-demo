@@ -194,7 +194,7 @@ export default class LinkList extends React.Component<any, any> {
                         updateStoreAfterVote={this._updateCacheAfterVote} />
                 )}
              </ol>
-            {isNewPage && (<nav className="pages">
+            {isNewPage && (<nav className="form pages">
                 <button type="button" onClick={() => this._previousPage()}> previous Page </button>
                 <button type="button" onClick={() => this._nextPage(data)}> next Page </button>
             </nav>)}
